@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """This module handles all default RESTFul APIs for City object"""
 
-from flask import abort, make_response, jsonify, request
+from flask import jsonify, request, abort
 from werkzeug.exceptions import BadRequest
 from api.v1.views import app_views
 from models import storage
@@ -49,7 +49,7 @@ def delete_city(city_id):
     city.delete()
     storage.save()
 
-    return make_response(jsonify({}), 200)
+    return jsonify({}), 200
 
 
 @app_views.route("/states/<state_id>/cities", methods=["POST"],
