@@ -76,7 +76,7 @@ def create_city(state_id):
     storage.new(new_city)
     storage.save()
 
-    return (jsonify(new_city.to_dict()), 201)
+    return jsonify(new_city.to_dict()), 201
 
 
 @app_views.route("/cities/<city_id>", methods=["PUT"], strict_slashes=False)
@@ -98,6 +98,5 @@ def update_city(city_id):
             setattr(city, key, value)
 
     city.save()
-    storage.save()
 
-    return (jsonify(city.to_dict()), 200)
+    return jsonify(city.to_dict()), 200
