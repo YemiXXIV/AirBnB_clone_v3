@@ -12,9 +12,8 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
-classes = {'BaseModel': BaseModel, 'User': User, 'Place': Place,
-           'State': State, 'City': City, 'Amenity': Amenity,
-           'Review': Review}
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 
 class FileStorage:
@@ -67,19 +66,13 @@ class FileStorage:
                 del self.__objects[key]
 
     def get(self, cls, id):
-        """
-        returns object based on it's class and id
-        None if not found
-        Args:
-            id (int): id of the class instance
-            cls (obj): class object_
-        """
-        if cls in classes.values() and id and type(id) is str:
-            d_obj = self.all(cls)
-            for key, value in d_obj.items():
-                if key.split(".")[1] == id:
-                    return value
-        return None
+        """Retrieve an object based on class and ID"""
+        obj_key = "{}.{}".format(cls.__name__, id)
+        try:
+            obj = FileStorage.__objects[obj_key]
+        except KeyError as e:
+            return None
+        return obj
 
     def count(self, cls=None):
         """Count the number of objects in storage matching the given class"""
