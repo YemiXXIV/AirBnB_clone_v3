@@ -12,8 +12,8 @@ def users_list():
     """Returns a list of all User objects in a json representation"""
 
     users = storage.all(User)
-    users_list = [user.to_dict() for user in users.values()]
-    return jsonify(users_list), 200
+    user_list = [user.to_dict() for user in users.values()]
+    return jsonify(user_list), 200
 
 
 @app_views.route("/users/<user_id>", methods=["GET"], strict_slashes=False)
