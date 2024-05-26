@@ -21,7 +21,7 @@ def place_reviews(place_id):
 
     reviews_list = [review.to_dict() for review in place.reviews]
 
-    return jsonify(reviews_list)
+    return jsonify(reviews_list), 200
 
 
 @app_views.route("/reviews/<review_id>", methods=["GET"], strict_slashes=False)
@@ -33,7 +33,7 @@ def get_review(review_id):
     if not review:
         abort(404)
 
-    return jsonify(review.to_dict())
+    return jsonify(review.to_dict()), 200
 
 
 @app_views.route("/reviews/<review_id>", methods=["DELETE"],
@@ -84,7 +84,7 @@ def create_review(place_id):
     storage.new(new_review)
     storage.save()
 
-    return (jsonify(new_review.to_dict()), 201)
+    return jsonify(new_review.to_dict()), 201
 
 
 @app_views.route("/reviews/<review_id>", methods=["PUT"], strict_slashes=False)
@@ -107,6 +107,5 @@ def update_review(review_id):
             setattr(review, key, value)
 
     review.save()
-    storage.save()
 
-    return (jsonify(review.to_dict()), 200)
+    return jsonify(review.to_dict()), 200

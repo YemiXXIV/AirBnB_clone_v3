@@ -2,7 +2,7 @@
 """This module handles all default RESTFul APIs for User object"""
 
 from api.v1.views import app_views
-from flask import abort, make_response, jsonify, request
+from flask import abort, jsonify, request
 from models import storage
 from models.user import User
 
@@ -13,7 +13,7 @@ def users_list():
 
     users = storage.all(User)
     users_list = [user.to_dict() for user in users.values()]
-    return jsonify(users_list)
+    return jsonify(users_list), 200
 
 
 @app_views.route("/users/<user_id>", methods=["GET"], strict_slashes=False)
@@ -25,7 +25,7 @@ def get_user(user_id):
     if not user:
         abort(404)
 
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict()), 200
 
 
 @app_views.route("/users/<user_id>", methods=["DELETE"],
@@ -38,13 +38,13 @@ def delete_user(user_id):
     if not user:
         abort(404)
 
-    storage.delete(user)
+    user.delete()
     storage.save()
 
-    return make_response(jsonify({}), 200)
+    return jsonify({}), 200
 
 
-@app_views.route("/users/", methods=["POST"], strict_slashes=False)
+@app_views.route("/users", methods=["POST"], strict_slashes=False)
 def create_user():
     """Creates a new user"""
 
@@ -63,7 +63,7 @@ def create_user():
     storage.new(new_user)
     storage.save()
 
-    return (jsonify(new_user.to_dict()), 201)
+    return jsonify(new_user.to_dict()), 201
 
 
 @app_views.route("/users/<user_id>", methods=["PUT"], strict_slashes=False)
@@ -85,6 +85,5 @@ def update_user(user_id):
             setattr(user, key, value)
 
     user.save()
-    storage.save()
 
-    return (jsonify(user.to_dict()), 200)
+    return jsonify(user.to_dict()), 200
