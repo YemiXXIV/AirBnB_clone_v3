@@ -16,8 +16,9 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-classes = {"Amenity": Amenity, "City": City,
-           "Place": Place, "Review": Review, "State": State, "User": User}
+classes = {'BaseModel': BaseModel, 'User': User, 'Place': Place,
+           'State': State, 'City': City, 'Amenity': Amenity,
+           'Review': Review}
 
 
 class DBStorage:
@@ -74,9 +75,10 @@ class DBStorage:
     def get(self, cls, id):
         """
         returns object based on it's class and id
+        None if not found
         Args:
-            id (int): The id of the class instance
-            cls (obj): class type
+            id (int): id of the class instance
+            cls (obj): class object_
         """
         if cls in classes.values() and id and type(id) is str:
             d_obj = self.all(cls)
