@@ -2,7 +2,7 @@
 """This module handles all default RESTFul APIs for Amenity object"""
 
 from api.v1.views import app_views
-from flask import abort, make_response, jsonify, request
+from flask import abort, jsonify, request
 from models import storage
 from models.amenity import Amenity
 from werkzeug.exceptions import BadRequest
@@ -14,7 +14,7 @@ def amenities_list():
 
     amenities = storage.all(Amenity)
     amenities_list = [amenity.to_dict() for amenity in amenities.values()]
-    return jsonify(amenities_list)
+    return jsonify(amenities_list), 200
 
 
 @app_views.route("/amenities/<amenity_id>", methods=["GET"],
@@ -43,7 +43,7 @@ def delete_amenity(amenity_id):
     amenity.delete()
     storage.save()
 
-    return make_response(jsonify({}), 200)
+    return jsonify({}), 200
 
 
 @app_views.route("/amenities", methods=["POST"], strict_slashes=False)
@@ -53,17 +53,17 @@ def create_amenity():
     try:
         amenity = request.get_json()
     except BadRequest as e:
-        abort(400, "Not a JSON")
+        abort(400, description="Not a JSON")
 
     if 'name' not in amenity:
-        abort(400, "Missing name")
+        abort(400, description="Missing name")
 
     new_amenity = Amenity(**amenity)
 
     storage.new(new_amenity)
     storage.save()
 
-    return (jsonify(new_amenity.to_dict()), 201)
+    return jsonify(new_amenity.to_dict()), 201
 
 
 @app_views.route("/amenities/<amenity_id>", methods=["PUT"],
@@ -79,7 +79,7 @@ def update_amenity(amenity_id):
     try:
         new_data = request.get_json()
     except BadRequest as e:
-        abort(400, "Not a JSON")
+        abort(400, description="Not a JSON")
 
     for key, value in new_data.items():
         if key not in ['id', 'created_at', 'updated_at']:
@@ -87,4 +87,4 @@ def update_amenity(amenity_id):
 
     amenity.save()
 
-    return (jsonify(amenity.to_dict()), 200)
+    return jsonify(amenity.to_dict()), 200
