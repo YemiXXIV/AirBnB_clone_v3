@@ -5,7 +5,6 @@ from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models import storage
 from models.amenity import Amenity
-from werkzeug.exceptions import BadRequest
 
 
 @app_views.route("/amenities", methods=["GET"], strict_slashes=False)
@@ -52,7 +51,7 @@ def create_amenity():
 
     try:
         amenity = request.get_json()
-    except BadRequest as e:
+    except Exception as e:
         abort(400, description="Not a JSON")
 
     if 'name' not in amenity:
@@ -78,7 +77,7 @@ def update_amenity(amenity_id):
 
     try:
         new_data = request.get_json()
-    except BadRequest as e:
+    except Exception as e:
         abort(400, description="Not a JSON")
 
     for key, value in new_data.items():
