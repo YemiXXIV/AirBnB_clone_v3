@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 """This module contanis routes for /status and /stats"""
 
-
-from api.v1.views import app_views
 from flask import jsonify
+from api.v1.views import app_views
 from models.amenity import Amenity
 from models.city import City
 from models.place import Place
@@ -17,8 +16,7 @@ from models import storage
 def status():
     """Returns the status of an API"""
 
-    status = {"status": "OK"}
-    return jsonify(status)
+    return jsonify({"status": "OK"}), 200
 
 
 @app_views.route('/stats', methods=['GET'], strict_slashes=False)
