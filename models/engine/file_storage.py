@@ -66,13 +66,18 @@ class FileStorage:
                 del self.__objects[key]
 
     def get(self, cls, id):
-        """Retrieve an object based on class and ID"""
-        obj_key = "{}.{}".format(cls.__name__, id)
-        try:
-            obj = FileStorage.__objects[obj_key]
-        except KeyError as e:
-            return None
-        return obj
+        """
+        returns object based on it's class and id
+        Args:
+            id (int): The id of the class instance
+            cls (obj): class type
+        """
+        if cls in classes.values() and id and type(id) is str:
+            d_obj = self.all(cls)
+            for key, value in d_obj.items():
+                if key.split(".")[1] == id:
+                    return value
+        return None
 
     def count(self, cls=None):
         """Count the number of objects in storage matching the given class"""
