@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """This module handles all default RESTFul APIs for City object"""
 
-from flask import jsonify, abort
+from flask import jsonify, request, abort
+from werkzeug.exceptions import BadRequest
 from api.v1.views import app_views
 from models import storage
 from models.city import City
@@ -49,3 +50,30 @@ def delete_city(city_id):
     storage.save()
 
     return jsonify({}), 200
+
+
+@app_views.route("/states/<state_id>/cities", methods=["POST"],
+                 strict_slashes=False)
+def create_city(state_id):
+    """Creates a new city that is a part of a specific state"""
+
+    state = storage.get(State, state_id)
+
+    if not state:
+        abort(404)
+
+    try:
+        city: City = request.get_json()
+    except BadRequest:
+        abort(400, description="Not a JSON")
+
+    if 'name' not in city:
+        abort(400, description="Missing name")
+
+    new_city = City(**city)
+    new_city.state_id = state_id
+
+    storage.new(new_city)
+    storage.save()
+
+    return jsonify(new_city.to_dict()), 201
