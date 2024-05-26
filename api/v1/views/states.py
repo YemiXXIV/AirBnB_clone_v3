@@ -87,10 +87,3 @@ def update_state(state_id):
     storage.save()
 
     return (jsonify(state.to_dict()), 200)
-
-
-@app_views.errorhandler(400)
-def not_json(exc):
-    """Handles the error (400) and returns the response in a json format"""
-
-    return make_response(jsonify({"error": exc.description}), 400)
