@@ -101,10 +101,3 @@ def update_city(city_id):
     storage.save()
 
     return (jsonify(city.to_dict()), 200)
-
-
-@app_views.errorhandler(400)
-def not_json(exc):
-    """Handles the error (400) and returns the response in a json format"""
-
-    return make_response(jsonify({"error": exc.description}), 400)

@@ -8,7 +8,6 @@ from models.amenity import Amenity
 from werkzeug.exceptions import BadRequest
 
 
-
 @app_views.route("/amenities", methods=["GET"], strict_slashes=False)
 def amenities_list():
     """Returns a list of all amenities in a json representation"""
