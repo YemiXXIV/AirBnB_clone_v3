@@ -2,12 +2,11 @@
 """This module handles all default RESTFul APIs for Review object"""
 
 from api.v1.views import app_views
-from flask import abort, make_response, jsonify, request
+from flask import abort, jsonify, request
 from models import storage
 from models.review import Review
 from models.place import Place
 from models.user import User
-from werkzeug.exceptions import BadRequest
 
 
 @app_views.route("/places/<place_id>/reviews", methods=["GET"],
@@ -50,7 +49,7 @@ def delete_review(review_id):
     review.delete()
     storage.save()
 
-    return make_response(jsonify({}), 200)
+    return jsonify({}), 200
 
 
 @app_views.route("/places/<place_id>/reviews", methods=["POST"],
@@ -65,7 +64,7 @@ def create_review(place_id):
 
     try:
         review_data = request.get_json()
-    except BadRequest as e:
+    except Exception as e:
         abort(400, description="Not a JSON")
 
     if 'user_id' not in review_data:
@@ -99,7 +98,7 @@ def update_review(review_id):
 
     try:
         new_data = request.get_json()
-    except BadRequest as e:
+    except Exception as e:
         abort(400, description="Not a JSON")
 
     for key, value in new_data.items():

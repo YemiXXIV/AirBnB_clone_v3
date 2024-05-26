@@ -2,7 +2,6 @@
 """This module handles all default RESTFul APIs for City object"""
 
 from flask import jsonify, request, abort
-from werkzeug.exceptions import BadRequest
 from api.v1.views import app_views
 from models import storage
 from models.city import City
@@ -64,7 +63,7 @@ def create_city(state_id):
 
     try:
         city = request.get_json()
-    except BadRequest:
+    except Exception:
         abort(400, description="Not a JSON")
 
     if 'name' not in city:
@@ -90,7 +89,7 @@ def update_city(city_id):
 
     try:
         new_data = request.get_json()
-    except BadRequest:
+    except Exception:
         abort(400, description="Not a JSON")
 
     for key, value in new_data.items():

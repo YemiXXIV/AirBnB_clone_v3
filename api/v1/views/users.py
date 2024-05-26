@@ -5,7 +5,6 @@ from api.v1.views import app_views
 from flask import abort, make_response, jsonify, request
 from models import storage
 from models.user import User
-from werkzeug.exceptions import BadRequest
 
 
 @app_views.route("/users", methods=["GET"], strict_slashes=False)
@@ -51,7 +50,7 @@ def create_user():
 
     try:
         user_data = request.get_json()
-    except BadRequest as e:
+    except Exception as e:
         abort(400, description="Not a JSON")
 
     if 'email' not in user_data:
@@ -78,7 +77,7 @@ def update_user(user_id):
 
     try:
         data = request.get_json()
-    except BadRequest as e:
+    except Exception as e:
         abort(400, description="Not a JSON")
 
     for key, value in data.items():
