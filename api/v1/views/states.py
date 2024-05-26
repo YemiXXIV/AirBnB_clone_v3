@@ -13,8 +13,8 @@ def states_list():
     """Returns a list of all State objects in a json representation"""
 
     states = storage.all(State)
-    states_list = [state.to_dict() for state in states.values()]
-    return jsonify(states_list), 200
+    state_list = [state.to_dict() for state in states.values()]
+    return jsonify(state_list), 200
 
 
 @app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)

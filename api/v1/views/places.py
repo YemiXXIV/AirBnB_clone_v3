@@ -2,7 +2,7 @@
 """This module handles all default RESTFul APIs for Place object"""
 
 from api.v1.views import app_views
-from flask import abort, make_response, jsonify, request
+from flask import abort, jsonify, request
 from models import storage
 from models.city import City
 from models.place import Place
@@ -50,7 +50,7 @@ def delete_place(place_id):
     place.delete()
     storage.save()
 
-    return make_response(jsonify({}), 200)
+    return jsonify({}), 200
 
 
 @app_views.route("/cities/<city_id>/places", methods=["POST"],
@@ -85,7 +85,7 @@ def create_place(city_id):
     storage.new(new_place)
     storage.save()
 
-    return (jsonify(new_place.to_dict()), 201)
+    return jsonify(new_place.to_dict()), 201
 
 
 @app_views.route("/places/<place_id>", methods=["PUT"], strict_slashes=False)
@@ -107,6 +107,5 @@ def update_place(place_id):
             setattr(place, key, value)
 
     place.save()
-    storage.save()
 
-    return (jsonify(place.to_dict()), 200)
+    return jsonify(place.to_dict()), 200
