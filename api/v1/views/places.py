@@ -64,6 +64,8 @@ def create_place(city_id):
 
     try:
         place_data = request.get_json()
+        if not place_data:
+            abort(400, description="Not a JSON")
     except Exception as e:
         abort(400, description="Not a JSON")
 
@@ -98,6 +100,8 @@ def update_place(place_id):
 
     try:
         new_data = request.get_json()
+        if not new_data:
+            abort(400, description="Not a JSON")
     except Exception as e:
         abort(400, description="Not a JSON")
 
