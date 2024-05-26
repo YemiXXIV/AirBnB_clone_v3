@@ -1,32 +1,31 @@
 #!/usr/bin/python3
-"""This module contanis routes for /status and /stats"""
+"""
+App views for AirBnB_clone_v3
+"""
 
-
-from api.v1.views import app_views
 from flask import jsonify
-from models.amenity import Amenity
-from models.city import City
-from models.place import Place
-from models.review import Review
-from models.state import State
-from models.user import User
 from models import storage
+from api.v1.views import app_views
 
 
-@app_views.route('/status', methods=['GET'], strict_slashes=False)
+@app_views.route('/status')
 def status():
-    """Returns the status of an API"""
+    """ returns status """
+    status = {"status": "OK"}
+    return jsonify(status)
 
-    return jsonify({"status": "OK"})
 
-
-@app_views.route('/stats', methods=['GET'], strict_slashes=False)
-def stats():
-    """Return the number of each objects by type"""
-
-    classes = {"users": User, "places": Place, "cities": City,
-               "states": State, "amenities": Amenity, "reviews": Review}
-    new_dict = {}
-    for key, value in classes.items():
-        new_dict[key] = storage.count(value)
-    return jsonify(new_dict)
+@app_views.route('/stats')
+def count():
+    """ returns number of each objects by type """
+    total = {}
+    classes = {"Amenity": "amenities",
+               "City": "cities",
+               "Place": "places",
+               "Review": "reviews",
+               "State": "states",
+               "User": "users"}
+    for cls in classes:
+        count = storage.count(cls)
+        total[classes.get(cls)] = count
+    return jsonify(total)
