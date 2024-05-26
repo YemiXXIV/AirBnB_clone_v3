@@ -64,7 +64,7 @@ def create_city(state_id):
 
     try:
         city: City = request.get_json()
-    except BadRequest as e:
+    except BadRequest:
         abort(400, description="Not a JSON")
 
     if 'name' not in city:
@@ -90,7 +90,7 @@ def update_city(city_id):
 
     try:
         new_data = request.get_json()
-    except BadRequest as e:
+    except BadRequest:
         abort(400, description="Not a JSON")
 
     for key, value in new_data.items():
