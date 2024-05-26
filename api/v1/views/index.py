@@ -10,20 +10,20 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+from models import storage
 
 
-@app_views.route('/status', methods=['GET'])
+@app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status():
     """Returns the status of an API"""
 
     return jsonify({"status": "OK"})
 
 
-@app_views.route('/stats', methods=['GET'])
+@app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def stats():
     """Return the number of each objects by type"""
 
-    from models import storage
     classes = {"users": User, "places": Place, "cities": City,
                "states": State, "amenities": Amenity, "reviews": Review}
     new_dict = {}
