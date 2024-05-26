@@ -77,3 +77,26 @@ def create_city(state_id):
     storage.save()
 
     return jsonify(new_city.to_dict()), 201
+
+
+@app_views.route("/cities/<city_id>", methods=["PUT"], strict_slashes=False)
+def update_city(city_id):
+    """Updates a city object"""
+
+    city = storage.get(City, city_id)
+
+    if not city:
+        abort(404)
+
+    try:
+        new_data = request.get_json()
+    except BadRequest:
+        abort(400, description="Not a JSON")
+
+    for key, value in new_data.items():
+        if key not in ['id', 'created_at', 'updated_at']:
+            setattr(city, key, value)
+
+    city.save()
+
+    return jsonify(city.to_dict()), 200
