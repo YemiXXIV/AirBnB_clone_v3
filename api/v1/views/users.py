@@ -54,7 +54,7 @@ def create_user():
         abort(400, description="Not a JSON")
 
     if 'email' not in user_data:
-        abort(400, description="Missing name")
+        abort(400, description="Missing email")
     if 'password' not in user_data:
         abort(400, description="Missing password")
 
