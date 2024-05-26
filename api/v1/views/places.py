@@ -12,7 +12,7 @@ from werkzeug.exceptions import BadRequest
 
 @app_views.route("/cities/<city_id>/places", methods=["GET"],
                  strict_slashes=False)
-def state_places(city_id):
+def city_places(city_id):
     """Returns a list of places of a specific City"""
 
     city = storage.get(City, city_id)
@@ -56,7 +56,7 @@ def delete_place(place_id):
 @app_views.route("/cities/<city_id>/places", methods=["POST"],
                  strict_slashes=False)
 def create_place(city_id):
-    """Creates a new city that is a part of a specific state"""
+    """Creates a new place that is a part of a specific city"""
 
     city = storage.get(City, city_id)
 
@@ -90,7 +90,7 @@ def create_place(city_id):
 
 @app_views.route("/places/<place_id>", methods=["PUT"], strict_slashes=False)
 def update_place(place_id):
-    """Updates a city"""
+    """Updates a place"""
 
     place = storage.get(Place, place_id)
 
