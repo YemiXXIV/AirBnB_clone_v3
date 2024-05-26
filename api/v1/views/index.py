@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+"""This module contanis routes for /status and /stats"""
+
+
 from api.v1.views import app_views
 from flask import jsonify
 from models.amenity import Amenity
@@ -7,18 +11,18 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
-"""This module contanis routes for /status and /stats"""
-
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status():
-    """Return status"""
+    """Returns the status of an API"""
+
     return jsonify({"status": "OK"})
 
 
 @app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def stats():
-    """Return stats"""
+    """Return the number of each objects by type"""
+
     from models import storage
     classes = {"users": User, "places": Place, "cities": City,
                "states": State, "amenities": Amenity, "reviews": Review}
