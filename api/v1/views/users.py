@@ -50,6 +50,8 @@ def create_user():
 
     try:
         user_data = request.get_json()
+        if not data:
+            abort(400, description="Not a JSON")
     except Exception as e:
         abort(400, description="Not a JSON")
 
@@ -77,6 +79,8 @@ def update_user(user_id):
 
     try:
         data = request.get_json()
+        if not data:
+            abort(400, description="Not a JSON")
     except Exception as e:
         abort(400, description="Not a JSON")
 
