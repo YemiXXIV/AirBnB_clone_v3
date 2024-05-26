@@ -7,7 +7,6 @@ from models import storage
 from models.city import City
 from models.place import Place
 from models.user import User
-from werkzeug.exceptions import BadRequest
 
 
 @app_views.route("/cities/<city_id>/places", methods=["GET"],
@@ -65,7 +64,7 @@ def create_place(city_id):
 
     try:
         place_data = request.get_json()
-    except BadRequest as e:
+    except Exception as e:
         abort(400, description="Not a JSON")
 
     if 'user_id' not in place_data:
@@ -99,7 +98,7 @@ def update_place(place_id):
 
     try:
         new_data = request.get_json()
-    except BadRequest as e:
+    except Exception as e:
         abort(400, description="Not a JSON")
 
     for key, value in new_data.items():
