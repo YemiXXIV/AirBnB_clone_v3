@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """This module handles all default RESTFul APIs for City object"""
 
-from api.v1.views import app_views
 from flask import abort, make_response, jsonify, request
+from werkzeug.exceptions import BadRequest
+from api.v1.views import app_views
 from models import storage
 from models.city import City
 from models.state import State
-from werkzeug.exceptions import BadRequest
 
 
 @app_views.route("/states/<state_id>/cities", methods=["GET"],
@@ -81,7 +81,7 @@ def create_city(state_id):
 
 @app_views.route("/cities/<city_id>", methods=["PUT"], strict_slashes=False)
 def update_city(city_id):
-    """Updates a city"""
+    """Updates a city object"""
 
     city = storage.get(City, city_id)
 
