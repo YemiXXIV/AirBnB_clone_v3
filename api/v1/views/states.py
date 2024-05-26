@@ -2,7 +2,7 @@
 """This module handles all default RESTFul APIs for State object"""
 
 from api.v1.views import app_views
-from flask import abort, make_response, jsonify, request
+from flask import abort, jsonify, request
 from models import storage
 from models.state import State
 from werkzeug.exceptions import BadRequest
@@ -14,7 +14,7 @@ def states_list():
 
     states = storage.all(State)
     states_list = [state.to_dict() for state in states.values()]
-    return jsonify(states_list)
+    return jsonify(states_list), 200
 
 
 @app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)
@@ -26,7 +26,7 @@ def get_state(state_id):
     if not state:
         abort(404)
 
-    return jsonify(state.to_dict())
+    return jsonify(state.to_dict()), 200
 
 
 @app_views.route("/states/<state_id>", methods=["DELETE"],
@@ -39,10 +39,10 @@ def delete_state(state_id):
     if not state:
         abort(404)
 
-    storage.delete(state)
+    state.delete()
     storage.save()
 
-    return make_response(jsonify({}), 200)
+    return jsonify({}), 200
 
 
 @app_views.route("/states/", methods=["POST"], strict_slashes=False)
@@ -62,7 +62,7 @@ def create_state():
     storage.new(new_state)
     storage.save()
 
-    return (jsonify(new_state.to_dict()), 201)
+    return jsonify(new_state.to_dict()), 201
 
 
 @app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
@@ -84,6 +84,5 @@ def update_state(state_id):
             setattr(state, key, value)
 
     state.save()
-    storage.save()
 
-    return (jsonify(state.to_dict()), 200)
+    return jsonify(state.to_dict()), 200
