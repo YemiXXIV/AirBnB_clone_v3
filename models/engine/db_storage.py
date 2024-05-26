@@ -3,9 +3,7 @@
 Contains the class DBStorage
 """
 
-from os import getenv
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+import models
 from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from models.city import City
@@ -13,11 +11,13 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+from os import getenv
+import sqlalchemy
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
-
-classes = {'BaseModel': BaseModel, 'User': User, 'Place': Place,
-           'State': State, 'City': City, 'Amenity': Amenity,
-           'Review': Review}
+classes = {"Amenity": Amenity, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 
 class DBStorage:
@@ -72,18 +72,9 @@ class DBStorage:
         self.__session = Session
 
     def get(self, cls, id):
-        """
-        returns object based on it's class and id
-        None if not found
-        Args:
-            id (int): id of the class instance
-            cls (obj): class object_
-        """
-        if cls in classes.values() and id and type(id) is str:
-            d_obj = self.all(cls)
-            for key, value in d_obj.items():
-                if key.split(".")[1] == id:
-                    return value
+        """Retrieve an object based on class and ID"""
+        if cls and id:
+            return self.__session.query(cls).get(id)
         return None
 
     def count(self, cls=None):
