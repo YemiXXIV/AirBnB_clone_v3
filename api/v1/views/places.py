@@ -7,6 +7,8 @@ from models import storage
 from models.city import City
 from models.place import Place
 from models.user import User
+from models.state import State
+from models.amenity import Amenity
 
 
 @app_views.route("/cities/<city_id>/places", methods=["GET"],
@@ -112,3 +114,72 @@ def update_place(place_id):
     place.save()
 
     return jsonify(place.to_dict()), 200
+
+
+@app_views.route("places_search", methods=["POST"], strict_slashes=False)
+def places_search():
+    """
+    Retrieves all Place objects depending of the JSON
+    in the body of the request.
+
+    The JSON body can contain 3 optional keys:
+        states: list of State ids
+        cities: list of City ids
+        amenities: list of Amenity ids
+    """
+
+    try:
+        data = request.get_json()
+        if data is None:
+            abort(400, description="Not a JSON")
+    except Exception as e:
+        abort(400, description="Not a JSON")
+
+    places_list = []
+    cities_list = []
+    result = []
+
+    if 'states' in data:
+        for id in data['states']:
+            state = storage.get(State, id)
+            if not state:
+                abort(404)
+            cities_list = state.cities
+            for city in cities_list:
+                places_list.extend(city.places)
+
+    if 'cities' in data:
+        for id in data['cities']:
+            city = storage.get(City, id)
+            if not city:
+                abort(404)
+
+            if city.state_id not in data['states']:
+                places_list.extend(city.places)
+
+    if 'amenities' in data:
+        if not places_list:
+            places_list = storage.all(Place)
+
+        amenities_list = []
+
+        for id in data['amenities']:
+            amenities_list.append(storage.get(Amenity, id))
+
+        for place in places_list:
+            add = True
+            for place_amenities in place.amenities:
+                for amenity in place_amenities:
+                    if amenity not in amenities_list:
+                        add = False
+                        break
+                if not add:
+                    break
+            if add:
+                result.append(place)
+    else:
+        result = places_list
+
+    result = [place.to_dict() for place in result]
+
+    return jsonify(result), 200
