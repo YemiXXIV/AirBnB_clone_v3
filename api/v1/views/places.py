@@ -142,7 +142,7 @@ def places_search():
     result = []
 
     if states_ids:
-        for id in data['states']:
+        for id in states_ids:
             state = storage.get(State, id)
             if not state:
                 abort(404)
@@ -150,12 +150,12 @@ def places_search():
                 places_list.extend(city.places)
 
     if cities_ids:
-        for id in data['cities']:
+        for id in cities_ids:
             city = storage.get(City, id)
             if not city:
                 abort(404)
             if 'states' in data:
-                if city.state_id in data['states']:
+                if city.state_id in states_ids:
                     continue
             places_list.extend(city.places)
 
@@ -179,4 +179,4 @@ def places_search():
         result = places_list
 
     result = [place.to_dict() for place in result]
-    return jsonify(result), 200
+    return jsonify({'error': 'Not a JSON'}), 200
