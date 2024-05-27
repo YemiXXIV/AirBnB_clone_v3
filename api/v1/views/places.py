@@ -2,7 +2,7 @@
 """This module handles all default RESTFul APIs for Place object"""
 
 from api.v1.views import app_views
-from flask import abort, jsonify, make_response, request
+from flask import abort, jsonify, request
 from models import storage
 from models.city import City
 from models.place import Place
@@ -131,9 +131,9 @@ def places_search():
     try:
         data = request.get_json()
         if data is None:
-            return make_response(jsonify({'error': 'Not a JSON'}), 400)
+            abort(400, description="Not a JSON")
     except Exception as e:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+        abort(400, description="Not a JSON")
 
     places_list = []
     states_ids = data.get("states", [])
@@ -144,20 +144,18 @@ def places_search():
     if states_ids:
         for id in data['states']:
             state = storage.get(State, id)
-            if not state:
-                abort(404)
-            for city in state.cities:
-                places_list.extend(city.places)
+            if state:
+                for city in state.cities:
+                    places_list.extend(city.places)
 
     if cities_ids:
         for id in data['cities']:
             city = storage.get(City, id)
-            if not city:
-                abort(404)
-            if 'states' in data:
-                if city.state_id in data['states']:
-                    continue
-            places_list.extend(city.places)
+            if city:
+                if 'states' in data:
+                    if city.state_id in data['states']:
+                        continue
+                places_list.extend(city.places)
 
     if 'amenities' in data:
         if not places_list:
