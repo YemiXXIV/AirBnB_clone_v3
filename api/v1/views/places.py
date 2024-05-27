@@ -2,7 +2,7 @@
 """This module handles all default RESTFul APIs for Place object"""
 
 from api.v1.views import app_views
-from flask import abort, jsonify, request
+from flask import abort, jsonify, make_response, request
 from models import storage
 from models.city import City
 from models.place import Place
@@ -117,64 +117,41 @@ def update_place(place_id):
 
 
 @app_views.route("places_search", methods=["POST"], strict_slashes=False)
-def places_search():
-    """
-    Retrieves all Place objects depending of the JSON
-    in the body of the request.
-
-    The JSON body can contain 3 optional keys:
-        states: list of State ids
-        cities: list of City ids
-        amenities: list of Amenity ids
-    """
-
-    try:
-        data = request.get_json()
-        if data is None:
-            abort(400, description="Not a JSON")
-    except Exception as e:
-        abort(400, description="Not a JSON")
-
-    places_list = []
-    states_ids = data.get("states", [])
-    cities_ids = data.get("cities", [])
-
-    result = []
-
-    if states_ids:
-        for id in data['states']:
-            state = storage.get(State, id)
-            if state:
-                for city in state.cities:
-                    places_list.extend(city.places)
-
-    if cities_ids:
-        for id in data['cities']:
-            city = storage.get(City, id)
-            if city:
-                if 'states' in data:
-                    if city.state_id in data['states']:
-                        continue
-                places_list.extend(city.places)
-
-    if 'amenities' in data:
-        if not places_list:
-            places_list = storage.all(Place).values()
-
-        amenities_list = []
-
-        for id in data['amenities']:
-            amenities_list.append(storage.get(Amenity, id))
-        for place in places_list:
-            add = True
-            for amenity in amenities_list:
-                if amenity not in place.amenities:
-                    add = False
+@app_views.route('/places_search', methods=['POST'], strict_slashes=False)
+def post_places_search():
+    """searches for a place"""
+    if request.get_json() is not None:
+        params = request.get_json()
+        states = params.get('states', [])
+        cities = params.get('cities', [])
+        amenities = params.get('amenities', [])
+        amenity_objects = []
+        for amenity_id in amenities:
+            amenity = storage.get('Amenity', amenity_id)
+            if amenity:
+                amenity_objects.append(amenity)
+        if states == cities == []:
+            places = storage.all('Place').values()
+        else:
+            places = []
+            for state_id in states:
+                state = storage.get('State', state_id)
+                state_cities = state.cities
+                for city in state_cities:
+                    if city.id not in cities:
+                        cities.append(city.id)
+            for city_id in cities:
+                city = storage.get('City', city_id)
+                for place in city.places:
+                    places.append(place)
+        confirmed_places = []
+        for place in places:
+            place_amenities = place.amenities
+            confirmed_places.append(place.to_dict())
+            for amenity in amenity_objects:
+                if amenity not in place_amenities:
+                    confirmed_places.pop()
                     break
-            if add:
-                result.append(place)
+        return jsonify(confirmed_places)
     else:
-        result = places_list
-
-    result = [place.to_dict() for place in result]
-    return jsonify(result), 200
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
