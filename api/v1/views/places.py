@@ -138,13 +138,10 @@ def places_search():
     places_list = []
     states_ids = data.get("states", [])
     cities_ids = data.get("cities", [])
-    amenities_id = data.get("amenities", [])
-    if not states_ids and not cities_ids and not amenities_id:
-        return jsonify(storage.all(Place)), 200
 
     result = []
 
-    if 'states' in data:
+    if states_ids:
         for id in data['states']:
             state = storage.get(State, id)
             if not state:
@@ -152,7 +149,7 @@ def places_search():
             for city in state.cities:
                 places_list.extend(city.places)
 
-    if 'cities' in data:
+    if cities_ids:
         for id in data['cities']:
             city = storage.get(City, id)
             if not city:
@@ -162,9 +159,10 @@ def places_search():
                     continue
             places_list.extend(city.places)
 
+    if not states_ids and not cities_ids:
+        places_list = storage.all(Place), 200
+
     if 'amenities' in data:
-        if not places_list:
-            places_list = storage.all(Place).values()
 
         amenities_list = []
 
