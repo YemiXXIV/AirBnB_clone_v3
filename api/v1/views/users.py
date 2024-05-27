@@ -61,7 +61,6 @@ def create_user():
         abort(400, description="Missing password")
 
     new_user = User(**user_data)
-    new_user.password = user_data["password"]
     storage.new(new_user)
     storage.save()
 
@@ -86,10 +85,7 @@ def update_user(user_id):
 
     for key, value in data.items():
         if key not in ['id', 'created_at', 'updated_at', 'email']:
-            if key == "password":
-                user.password = value
-            else:
-                setattr(user, key, value)
+            setattr(user, key, value)
 
     user.save()
 
