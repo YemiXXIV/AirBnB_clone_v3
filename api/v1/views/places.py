@@ -153,9 +153,12 @@ def places_search():
             city = storage.get(City, id)
             if not city:
                 abort(404)
+            if 'states' in data:
+                if city.state_id in data['states']:
+                    continue
+            places_list.extend(city.places)
 
-            if city.state_id not in data['states']:
-                places_list.extend(city.places)
+            places_list.extend(city.places)
 
     if 'amenities' in data:
         if not places_list:
