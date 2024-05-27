@@ -68,6 +68,9 @@ class BaseModel:
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
 
+        if 'amenities' in new_dict:
+            del new_dict['amenities']
+
         if "_password" in new_dict:
             new_dict['password'] = new_dict['_password']
             del new_dict['_password']
