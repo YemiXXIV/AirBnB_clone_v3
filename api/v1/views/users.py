@@ -5,7 +5,6 @@ from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models import storage
 from models.user import User
-import hashlib
 
 
 @app_views.route("/users", methods=["GET"], strict_slashes=False)
@@ -51,7 +50,7 @@ def create_user():
 
     try:
         user_data = request.get_json()
-        if not user_data:
+        if user_data is None:
             abort(400, description="Not a JSON")
     except Exception as e:
         abort(400, description="Not a JSON")
@@ -62,10 +61,7 @@ def create_user():
         abort(400, description="Missing password")
 
     new_user = User(**user_data)
-
-    encoded_password = hashlib.md5(new_user.password.encode()).hexdigest()
-    new_user.password = encoded_password
-
+    new_user.password = user_data["password"]
     storage.new(new_user)
     storage.save()
 
@@ -83,18 +79,17 @@ def update_user(user_id):
 
     try:
         data = request.get_json()
-        if not data:
+        if data is None:
             abort(400, description="Not a JSON")
     except Exception as e:
         abort(400, description="Not a JSON")
 
-    if 'password' in user:
-        encoded_password = hashlib.md5(user["password"].encode()).hexdigest()
-        user["password"] = encoded_password
-
     for key, value in data.items():
         if key not in ['id', 'created_at', 'updated_at', 'email']:
-            setattr(user, key, value)
+            if key == "password":
+                user.password = value
+            else:
+                setattr(user, key, value)
 
     user.save()
 

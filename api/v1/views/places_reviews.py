@@ -64,7 +64,7 @@ def create_review(place_id):
 
     try:
         review_data = request.get_json()
-        if not review_data:
+        if review_data is None:
             abort(400, description="Not a JSON")
     except Exception as e:
         abort(400, description="Not a JSON")
@@ -100,7 +100,7 @@ def update_review(review_id):
 
     try:
         new_data = request.get_json()
-        if not new_data:
+        if new_data is None:
             abort(400, description="Not a JSON")
     except Exception as e:
         abort(400, description="Not a JSON")
