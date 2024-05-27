@@ -136,7 +136,6 @@ def places_search():
         abort(400, description="Not a JSON")
 
     places_list = []
-    cities_list = []
     result = []
 
     if 'states' in data:
@@ -144,8 +143,7 @@ def places_search():
             state = storage.get(State, id)
             if not state:
                 abort(404)
-            cities_list = state.cities
-            for city in cities_list:
+            for city in state.cities:
                 places_list.extend(city.places)
 
     if 'cities' in data:
@@ -156,8 +154,6 @@ def places_search():
             if 'states' in data:
                 if city.state_id in data['states']:
                     continue
-            places_list.extend(city.places)
-
             places_list.extend(city.places)
 
     if 'amenities' in data:
