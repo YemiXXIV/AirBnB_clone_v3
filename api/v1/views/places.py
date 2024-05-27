@@ -135,6 +135,9 @@ def places_search():
     except Exception as e:
         abort(400, description="Not a JSON")
 
+    if data is {}:
+        return jsonify(storage.all(Place)), 200
+
     places_list = []
     result = []
 
