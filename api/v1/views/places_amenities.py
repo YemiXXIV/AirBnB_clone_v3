@@ -5,9 +5,8 @@ the link between (Place) objects and (Amenity) objects
 """
 
 from api.v1.views import app_views
-from flask import abort, jsonify, request
+from flask import abort, jsonify
 from models import storage
-from models.review import Review
 from models.place import Place
 from models.amenity import Amenity
 from os import getenv
@@ -62,11 +61,13 @@ def add_amenity_to_place(place_id, amenity_id):
     if not place or not amenity:
         abort(404)
 
-    if amenity not in place.amenities:
-        if getenv("HBNB_TYPE_STORAGE") == "db":
-            place.amenities.append(amenity)
-            place.save()
-        else:
-            place.amenity_id.append(amenity_id)
+    if amenity in place.amenities:
+        return jsonify(amenity.to_dict()), 200
+
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        place.amenities.append(amenity)
+        place.save()
+    else:
+        place.amenity_id.append(amenity_id)
 
     return jsonify(amenity.to_dict()), 201
