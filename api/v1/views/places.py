@@ -160,7 +160,7 @@ def places_search():
             places_list.extend(city.places)
 
     if not states_ids and not cities_ids:
-        places_list = storage.all(Place), 200
+        places_list = storage.all(Place)
 
     if 'amenities' in data:
 
