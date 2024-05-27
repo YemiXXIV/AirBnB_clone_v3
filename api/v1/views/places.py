@@ -162,7 +162,7 @@ def places_search():
 
     if 'amenities' in data:
         if not places_list:
-            places_list = storage.all(Place)
+            places_list = storage.all(Place).values()
 
         amenities_list = []
 
