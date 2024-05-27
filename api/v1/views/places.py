@@ -135,10 +135,13 @@ def places_search():
     except Exception as e:
         abort(400, description="Not a JSON")
 
-    if data is {}:
+    places_list = []
+    states_ids = data.get("states", [])
+    cities_ids = data.get("cities", [])
+    amenities_id = data.get("amenities", [])
+    if not states_ids and not cities_ids and not amenities_id:
         return jsonify(storage.all(Place)), 200
 
-    places_list = []
     result = []
 
     if 'states' in data:
