@@ -166,7 +166,11 @@ def places_search():
         amenities_list = []
 
         for id in data['amenities']:
-            amenities_list.append(storage.get(Amenity, id))
+            amenity_obj = storage.get(Amenity, id)
+            if not amenity_obj:
+                abort(404)
+
+            amenities_list.append(amenity_obj)
         for place in places_list:
             add = True
             for amenity in amenities_list:
