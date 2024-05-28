@@ -80,43 +80,52 @@ class TestDBStorage(unittest.TestCase):
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
         storage = DBStorage()
+        storage.reload()
         all_objects = storage.all()
         self.assertIsInstance(all_objects, dict)
+        storage.close()
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
         storage = DBStorage()
+        storage.reload()
         new_state = State(name="California")
         storage.new(new_state)
         storage.save()
         self.assertIn(new_state, storage.all(State).values())
+        storage.close()
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to the database"""
         storage = DBStorage()
         new_state = State(name="California")
+        storage.reload()
         storage.new(new_state)
         storage.save()
         saved_state = storage.get(State, new_state.id)
         self.assertIsNotNone(saved_state)
         self.assertEqual(saved_state.name, "California")
+        storage.close()
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         """Test the get method"""
         storage = DBStorage()
+        storage.reload()
         new_state = State(name="California")
         storage.new(new_state)
         storage.save()
         retrieved_state = storage.get(State, new_state.id)
         self.assertEqual(retrieved_state, new_state)
+        storage.close()
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Test the count method"""
         storage = DBStorage()
+        storage.reload()
         initial_count = storage.count()
         new_state = State(name="California")
         storage.new(new_state)
@@ -125,3 +134,4 @@ class TestDBStorage(unittest.TestCase):
         self.assertEqual(new_count, initial_count + 1)
         state_count = storage.count(State)
         self.assertGreaterEqual(state_count, 1)
+        storage.close()
