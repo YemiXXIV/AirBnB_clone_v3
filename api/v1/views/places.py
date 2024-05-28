@@ -141,23 +141,16 @@ def places_search():
 
     result = []
 
-    if states_ids:
-        for id in data['states']:
-            state = storage.get(State, id)
-            if not state:
-                abort(404)
-            for city in state.cities:
-                places_list.extend(city.places)
-
-    if cities_ids:
-        for id in data['cities']:
-            city = storage.get(City, id)
-            if not city:
-                abort(404)
-            if 'states' in data:
-                if city.state_id in data['states']:
-                    continue
-            places_list.extend(city.places)
+    for state_id in states_ids:
+        state = storage.get(State, state_id)
+        state_cities = state.cities
+        for city in state_cities:
+            if city.id not in cities_ids:
+                cities_ids.append(city.id)
+    for city_id in cities_ids:
+        city = storage.get(City, city_id)
+        for place in city.places:
+            places_list.append(place)
 
     if 'amenities' in data:
         if not places_list:
