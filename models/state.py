@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" holds class State"""
+"""
+holds class State
+"""
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 import models
@@ -8,7 +10,9 @@ from models.city import City
 
 
 class State(BaseModel, Base):
-    """Representation of state """
+    """
+    Representation for state 
+    """
     if models.storage_t == "db":
         __tablename__ = 'states'
         name = Column(String(128), nullable=False)
@@ -19,7 +23,9 @@ class State(BaseModel, Base):
     if models.storage_t != "db":
         @property
         def cities(self):
-            """getter for list of city instances related to the state"""
+            """
+            getter for list of city instances related to the state
+            """
             city_list = []
             all_cities = models.storage.all(City)
             for city in all_cities.values():
