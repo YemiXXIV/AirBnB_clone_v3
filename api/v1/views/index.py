@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""This module contanis routes for /status and /stats"""
+"""
+This module contains the routes for /status and /stats
+"""
 
 from flask import jsonify
 from api.v1.views import app_views
@@ -14,14 +16,18 @@ from models import storage
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status():
-    """Returns the status of an API"""
+    """
+    Returns the status of the API
+    """
 
     return jsonify({"status": "OK"}), 200
 
 
 @app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def stats():
-    """Return the number of each objects by type"""
+    """
+    Return the number of each objects by their type
+    """
 
     classes = {"users": User, "places": Place, "cities": City,
                "states": State, "amenities": Amenity, "reviews": Review}

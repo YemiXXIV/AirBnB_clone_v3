@@ -160,11 +160,10 @@ Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://tw
 # AirBnB Clone - Version 3
 
 ## Description
-This is the third version of the AirBnB clone project. This version builds upon the previous iterations by adding new features and improvements.
+This is the third version of the ongoing AirBnB clone project. This version builds upon previous iterations by adding new features and improvements.
 
 ## Current Contributors
-Olusegun Tayo - [Github](https://github.com/OluTshegz) / [Twitter](https://twitter.com/OluTshegz)
-Mohamed Ali - [Github](https://github.com/Mohamed-Ali7)
+Mustapha Yinusa - [Github](https://github.com/YemiXXIV) / [Twitter](https://twitter.com/YemiXXIV)
 
 ## New Features and Contributions
 Improvements made to existing features.

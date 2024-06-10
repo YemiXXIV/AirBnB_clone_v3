@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""This module handles all default RESTFul APIs for City object"""
+"""
+This module handles all default RESTFul APIs for City object
+"""
 
 from flask import jsonify, request, abort
 from api.v1.views import app_views
@@ -11,7 +13,9 @@ from models.state import State
 @app_views.route("/states/<state_id>/cities", methods=["GET"],
                  strict_slashes=False)
 def state_cities(state_id):
-    """Returns a list of cities of a specific state"""
+    """
+    Returns list of cities for a specific state
+    """
 
     state = storage.get(State, state_id)
 
@@ -25,7 +29,9 @@ def state_cities(state_id):
 
 @app_views.route("/cities/<city_id>", methods=["GET"], strict_slashes=False)
 def get_city(city_id):
-    """Return a city by its id"""
+    """
+    Return city by its id
+    """
 
     city = storage.get(City, city_id)
 
@@ -38,7 +44,9 @@ def get_city(city_id):
 @app_views.route("/cities/<city_id>", methods=["DELETE"],
                  strict_slashes=False)
 def delete_city(city_id):
-    """Deletes a city using its id"""
+    """
+    Deletes city by its id
+    """
 
     city = storage.get(City, city_id)
 
@@ -54,7 +62,9 @@ def delete_city(city_id):
 @app_views.route("/states/<state_id>/cities", methods=["POST"],
                  strict_slashes=False)
 def create_city(state_id):
-    """Creates a new city that is a part of a specific state"""
+    """
+    Creates new city in a specific state
+    """
 
     state = storage.get(State, state_id)
 
@@ -80,7 +90,9 @@ def create_city(state_id):
 
 @app_views.route("/cities/<city_id>", methods=["PUT"], strict_slashes=False)
 def update_city(city_id):
-    """Updates a city object"""
+    """
+    Update a city object
+    """
 
     city = storage.get(City, city_id)
 

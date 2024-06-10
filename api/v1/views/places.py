@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""This module handles all default RESTFul APIs for Place object"""
+"""
+This module handles default RESTFul APIs for the Place object
+"""
 
 from api.v1.views import app_views
 from flask import abort, jsonify, request
@@ -14,7 +16,9 @@ from models.amenity import Amenity
 @app_views.route("/cities/<city_id>/places", methods=["GET"],
                  strict_slashes=False)
 def city_places(city_id):
-    """Returns a list of places of a specific City"""
+    """
+    Returns a list of places for a specific City
+    """
 
     city = storage.get(City, city_id)
 
@@ -28,7 +32,9 @@ def city_places(city_id):
 
 @app_views.route("/places/<place_id>", methods=["GET"], strict_slashes=False)
 def get_place(place_id):
-    """Return a place by its id"""
+    """
+    Return place by its id
+    """
 
     place = storage.get(Place, place_id)
 
@@ -41,7 +47,9 @@ def get_place(place_id):
 @app_views.route("/places/<place_id>", methods=["DELETE"],
                  strict_slashes=False)
 def delete_place(place_id):
-    """Deletes a place using its id"""
+    """
+    Deletes place using its id
+    """
 
     place = storage.get(Place, place_id)
 
@@ -57,7 +65,9 @@ def delete_place(place_id):
 @app_views.route("/cities/<city_id>/places", methods=["POST"],
                  strict_slashes=False)
 def create_place(city_id):
-    """Creates a new place that is a part of a specific city"""
+    """
+    Creates new place for a specific city
+    """
 
     city = storage.get(City, city_id)
 
@@ -93,7 +103,9 @@ def create_place(city_id):
 
 @app_views.route("/places/<place_id>", methods=["PUT"], strict_slashes=False)
 def update_place(place_id):
-    """Updates a place"""
+    """
+    Updates a place
+    """
 
     place = storage.get(Place, place_id)
 
@@ -121,11 +133,6 @@ def places_search():
     """
     Retrieves all Place objects depending of the JSON
     in the body of the request.
-
-    The JSON body can contain 3 optional keys:
-        states: list of State ids
-        cities: list of City ids
-        amenities: list of Amenity ids
     """
 
     try:

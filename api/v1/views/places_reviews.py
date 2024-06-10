@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""This module handles all default RESTFul APIs for Review object"""
+"""
+This module handles default RESTFul APIs for Review object
+"""
 
 from api.v1.views import app_views
 from flask import abort, jsonify, request
@@ -12,7 +14,9 @@ from models.user import User
 @app_views.route("/places/<place_id>/reviews", methods=["GET"],
                  strict_slashes=False)
 def place_reviews(place_id):
-    """Returns a list of reviews of a specific place"""
+    """
+    Returns list of reviews for a specific place
+    """
 
     place = storage.get(Place, place_id)
 
@@ -26,7 +30,9 @@ def place_reviews(place_id):
 
 @app_views.route("/reviews/<review_id>", methods=["GET"], strict_slashes=False)
 def get_review(review_id):
-    """Return a review by its id"""
+    """
+    Return a review by its id
+    """
 
     review = storage.get(Review, review_id)
 
@@ -39,7 +45,9 @@ def get_review(review_id):
 @app_views.route("/reviews/<review_id>", methods=["DELETE"],
                  strict_slashes=False)
 def delete_review(review_id):
-    """Deletes a review using its id"""
+    """
+    Deletes a review by its id
+    """
 
     review = storage.get(Review, review_id)
 
@@ -55,7 +63,9 @@ def delete_review(review_id):
 @app_views.route("/places/<place_id>/reviews", methods=["POST"],
                  strict_slashes=False)
 def create_review(place_id):
-    """Creates a new review that is a related to a specific place"""
+    """
+    Creates new review that is related to a specific place
+    """
 
     place = storage.get(Place, place_id)
 
@@ -91,7 +101,9 @@ def create_review(place_id):
 
 @app_views.route("/reviews/<review_id>", methods=["PUT"], strict_slashes=False)
 def update_review(review_id):
-    """Updates a review"""
+    """
+    Updates review
+    """
 
     review = storage.get(Review, review_id)
 
